@@ -1,0 +1,19 @@
+{
+  "Version": 1,
+  "Hash": "/wrCYF8HH8gkkeLAbRzeJLK8XroVKGQsSE4TVSNq4sE=",
+  "Source": "Flight",
+  "BasePath": "_content/Flight",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "Flight\\wwwroot",
+      "Source": "Flight",
+      "ContentRoot": "C:\\Users\\Admin\\source\\repos\\Flight\\Flight\\wwwroot\\",
+      "BasePath": "_content/Flight",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": []
+}
