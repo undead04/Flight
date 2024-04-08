@@ -11,6 +11,7 @@ namespace Flight.Data
         public DbSet<Route> routes { get; set; }
         public DbSet<DocumentType> documentTypes { get; set; }
         public DbSet<DocumentFlight> documentFlight { get; set; }
+        public DbSet<PermissionDocumentType> permissionDocuments { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
@@ -30,6 +31,28 @@ namespace Flight.Data
                 .HasForeignKey(e => new { e.PoinOfUnLoad })
                 .OnDelete(DeleteBehavior.NoAction);
             });
+            builder.Entity<DocumentFlight>(e =>
+            {
+                e.HasOne(e => e.ApplicationUser)
+                .WithMany(e => e.DocumentFlights)
+                .HasForeignKey(e => e.CreateUserId)
+                .OnDelete(DeleteBehavior.Cascade);
+                e.HasOne(e => e.Flight)
+                .WithMany(e => e.DocumentFlight)
+                .HasForeignKey(e => e.FlightId)
+                .OnDelete(DeleteBehavior.NoAction);
+            });
+            builder.Entity<DocumentFlightPermission>(e =>
+            {
+                e.HasOne(e => e.GroupPermission)
+                .WithMany(e => e.DocumentFlightPermissions)
+                .HasForeignKey(e => e.GroupPermissionId)
+                .OnDelete(DeleteBehavior.NoAction);
+                e.HasOne(e => e.DocumentFlight)
+                .WithMany(e => e.DocumentFlightPermissions)
+                .HasForeignKey(e => e.DocumentFlightId)
+                .OnDelete(DeleteBehavior.NoAction);
+            });
             builder.Entity<DocumentType>(e =>
             {
                 e.HasMany(e => e.DocumentFlights)
@@ -44,6 +67,20 @@ namespace Flight.Data
                 .WithOne(e=>e.DocumentType)
                 .HasForeignKey(e=>e.DocumnetTypeId)
                 .OnDelete(DeleteBehavior.Cascade);
+                
+            });
+            builder.Entity<PermissionDocumentType>(e=>{
+                e.HasOne(e=>e.GroupPermission)
+                .WithMany(e=>e.PermissionDocumentTypes)
+                .HasForeignKey(e=>e.GroupPermissionId)
+                .OnDelete(DeleteBehavior.NoAction);
+            });
+            builder.Entity<GroupPermission>(e =>
+            {
+                e.HasOne(e => e.ApplicationUser)
+                .WithMany(e => e.GroupPermissions)
+                .HasForeignKey(e => e.CreateUserId)
+                .OnDelete(DeleteBehavior.NoAction);
             });
 
         }

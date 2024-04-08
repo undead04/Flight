@@ -22,7 +22,6 @@ C:\Users\Admin\source\repos\Flight\Flight\bin\Debug\net6.0\Microsoft.Extensions.
 C:\Users\Admin\source\repos\Flight\Flight\bin\Debug\net6.0\Microsoft.Extensions.Identity.Core.dll
 C:\Users\Admin\source\repos\Flight\Flight\bin\Debug\net6.0\Microsoft.Extensions.Identity.Stores.dll
 C:\Users\Admin\source\repos\Flight\Flight\bin\Debug\net6.0\Microsoft.Identity.Client.dll
-C:\Users\Admin\source\repos\Flight\Flight\bin\Debug\net6.0\Microsoft.IdentityModel.Abstractions.dll
 C:\Users\Admin\source\repos\Flight\Flight\bin\Debug\net6.0\Microsoft.IdentityModel.JsonWebTokens.dll
 C:\Users\Admin\source\repos\Flight\Flight\bin\Debug\net6.0\Microsoft.IdentityModel.Logging.dll
 C:\Users\Admin\source\repos\Flight\Flight\bin\Debug\net6.0\Microsoft.IdentityModel.Protocols.dll
@@ -74,3 +73,12 @@ C:\Users\Admin\source\repos\Flight\Flight\obj\Debug\net6.0\refint\Flight.dll
 C:\Users\Admin\source\repos\Flight\Flight\obj\Debug\net6.0\Flight.pdb
 C:\Users\Admin\source\repos\Flight\Flight\obj\Debug\net6.0\Flight.genruntimeconfig.cache
 C:\Users\Admin\source\repos\Flight\Flight\obj\Debug\net6.0\ref\Flight.dll
+C:\Users\Admin\source\repos\Flight\Flight\bin\Debug\net6.0\FluentValidation.dll
+C:\Users\Admin\source\repos\Flight\Flight\bin\Debug\net6.0\FluentValidation.AspNetCore.dll
+C:\Users\Admin\source\repos\Flight\Flight\bin\Debug\net6.0\FluentValidation.DependencyInjectionExtensions.dll
+C:\Users\Admin\source\repos\Flight\Flight\bin\Debug\net6.0\Microsoft.Extensions.DependencyModel.dll
+C:\Users\Admin\source\repos\Flight\Flight\bin\Debug\net6.0\Scrutor.dll
+C:\Users\Admin\source\repos\Flight\Flight\bin\Debug\net6.0\Swashbuckle.AspNetCore.Filters.dll
+C:\Users\Admin\source\repos\Flight\Flight\bin\Debug\net6.0\Microsoft.DotNet.PlatformAbstractions.dll
+C:\Users\Admin\source\repos\Flight\Flight\bin\Debug\net6.0\Newtonsoft.Json.dll
+C:\Users\Admin\source\repos\Flight\Flight\bin\Debug\net6.0\Swashbuckle.AspNetCore.Annotations.dll

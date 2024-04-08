@@ -57,9 +57,8 @@ namespace Flight.Migrations
                     Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Note = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    UserId = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreateUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Create_Date = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true),
                     Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
@@ -68,8 +67,8 @@ namespace Flight.Migrations
                 {
                     table.PrimaryKey("PK_AspNetRoles", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_AspNetRoles_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
+                        name: "FK_AspNetRoles_AspNetUsers_CreateUserId",
+                        column: x => x.CreateUserId,
                         principalTable: "AspNetUsers",
                         principalColumn: "Id");
                 });
@@ -162,9 +161,8 @@ namespace Flight.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FlightNo = table.Column<int>(type: "int", nullable: false),
+                    FlightNo = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DepartureDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Version = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     IsConfirm = table.Column<bool>(type: "bit", nullable: false),
                     PoinOfLoading = table.Column<int>(type: "int", nullable: false),
                     PoinOfUnLoad = table.Column<int>(type: "int", nullable: false),
@@ -226,20 +224,26 @@ namespace Flight.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PermissionDocumentType",
+                name: "permissionDocuments",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     DocumnetTypeId = table.Column<int>(type: "int", nullable: false),
-                    ClaimsType = table.Column<bool>(type: "bit", nullable: false),
-                    ClaimsValue = table.Column<bool>(type: "bit", nullable: false)
+                    GroupPermissionId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ClaimsType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ClaimsValue = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PermissionDocumentType", x => x.Id);
+                    table.PrimaryKey("PK_permissionDocuments", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PermissionDocumentType_documentTypes_DocumnetTypeId",
+                        name: "FK_permissionDocuments_AspNetRoles_GroupPermissionId",
+                        column: x => x.GroupPermissionId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_permissionDocuments_documentTypes_DocumnetTypeId",
                         column: x => x.DocumnetTypeId,
                         principalTable: "documentTypes",
                         principalColumn: "Id",
@@ -257,17 +261,17 @@ namespace Flight.Migrations
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Create_Date = table.Column<DateTime>(type: "datetime2", nullable: false),
                     Version = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Note = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ApplicationUserId = table.Column<string>(type: "nvarchar(450)", nullable: true)
+                    CreateUserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_documentFlight", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_documentFlight_AspNetUsers_ApplicationUserId",
-                        column: x => x.ApplicationUserId,
+                        name: "FK_documentFlight_AspNetUsers_CreateUserId",
+                        column: x => x.CreateUserId,
                         principalTable: "AspNetUsers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_documentFlight_documentTypes_DocumentTypeId",
                         column: x => x.DocumentTypeId,
@@ -277,8 +281,31 @@ namespace Flight.Migrations
                         name: "FK_documentFlight_flight_FlightId",
                         column: x => x.FlightId,
                         principalTable: "flight",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "DocumentFlightPermission",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DocumentFlightId = table.Column<int>(type: "int", nullable: false),
+                    GroupPermissionId = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_DocumentFlightPermission", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_DocumentFlightPermission_AspNetRoles_GroupPermissionId",
+                        column: x => x.GroupPermissionId,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_DocumentFlightPermission_documentFlight_DocumentFlightId",
+                        column: x => x.DocumentFlightId,
+                        principalTable: "documentFlight",
+                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateIndex(
@@ -287,9 +314,9 @@ namespace Flight.Migrations
                 column: "RoleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_AspNetRoles_ApplicationUserId",
+                name: "IX_AspNetRoles_CreateUserId",
                 table: "AspNetRoles",
-                column: "ApplicationUserId");
+                column: "CreateUserId");
 
             migrationBuilder.CreateIndex(
                 name: "RoleNameIndex",
@@ -326,9 +353,9 @@ namespace Flight.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_documentFlight_ApplicationUserId",
+                name: "IX_documentFlight_CreateUserId",
                 table: "documentFlight",
-                column: "ApplicationUserId");
+                column: "CreateUserId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_documentFlight_DocumentTypeId",
@@ -341,6 +368,16 @@ namespace Flight.Migrations
                 column: "FlightId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_DocumentFlightPermission_DocumentFlightId",
+                table: "DocumentFlightPermission",
+                column: "DocumentFlightId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_DocumentFlightPermission_GroupPermissionId",
+                table: "DocumentFlightPermission",
+                column: "GroupPermissionId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_documentTypes_UserId",
                 table: "documentTypes",
                 column: "UserId");
@@ -351,9 +388,14 @@ namespace Flight.Migrations
                 column: "PoinOfUnLoad");
 
             migrationBuilder.CreateIndex(
-                name: "IX_PermissionDocumentType_DocumnetTypeId",
-                table: "PermissionDocumentType",
+                name: "IX_permissionDocuments_DocumnetTypeId",
+                table: "permissionDocuments",
                 column: "DocumnetTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_permissionDocuments_GroupPermissionId",
+                table: "permissionDocuments",
+                column: "GroupPermissionId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -374,25 +416,28 @@ namespace Flight.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "documentFlight");
+                name: "DocumentFlightPermission");
 
             migrationBuilder.DropTable(
-                name: "PermissionDocumentType");
+                name: "permissionDocuments");
+
+            migrationBuilder.DropTable(
+                name: "documentFlight");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
-                name: "flight");
-
-            migrationBuilder.DropTable(
                 name: "documentTypes");
 
             migrationBuilder.DropTable(
-                name: "routes");
+                name: "flight");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "routes");
         }
     }
 }
