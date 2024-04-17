@@ -7,6 +7,20 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Include="Controllers\AddMemberController.cs" />
+    <Content Include="Controllers\ChangeOwnerSystemController.cs" />
+    <Content Include="Controllers\DocumentFlightController.cs" />
+    <Content Include="Controllers\DocumentTypeController.cs" />
+    <Content Include="Controllers\FlightController.cs" />
+    <Content Include="Controllers\GroupPermissionController.cs" />
+    <Content Include="Controllers\LoginController.cs" />
+    <Content Include="Controllers\PermissionDocumentTypeController.cs" />
+    <Content Include="Controllers\RouteController.cs" />
+    <Content Include="Controllers\UserController.cs" />
+    <Content Include="Controllers\WeatherForecastController.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="6.0.10" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.10" />
@@ -21,6 +35,8 @@
 
   <ItemGroup>
     <Folder Include="wwwroot\NewFolder\" />
+    <Folder Include="wwwroot\Uploads\Logo\" />
+    <Folder Include="wwwroot\Uploads\Signature\" />
   </ItemGroup>
 
 </Project>

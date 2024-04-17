@@ -1,5 +1,6 @@
 ﻿using Flight.Model.DTO;
 using Flight.Repository.PermissionRepository;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -16,6 +17,7 @@ namespace Flight.Controllers
             this.permissionRepository = permissionRepository;
         }
         [HttpGet("{Id}")]
+        [Authorize(Policy = "RequireRole")]
         public async Task<IActionResult> GetPermissionDocumentType(int Id)
         {
             try

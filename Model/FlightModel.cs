@@ -6,5 +6,6 @@ namespace Flight.Model
         public DateTime DepartureDate { get; set; }
         public int PoinOfLoading { get; set; } 
         public int PoinOfUnLoad { get; set; }
+        
     }
 }

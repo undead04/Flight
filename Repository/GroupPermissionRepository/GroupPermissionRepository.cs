@@ -1,6 +1,7 @@
 ﻿using Flight.Data;
 using Flight.Model;
 using Flight.Model.DTO;
+using Flight.Service.PaginationService;
 using Flight.Service.ReadTokenService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -13,12 +14,15 @@ namespace Flight.Repository.GroupPermissionRepository
         private readonly RoleManager<GroupPermission> roleManager;
         private readonly MyDbContext context;
         private readonly IReadTokenService readTokenService;
+        private readonly IPaginationService paginationServer;
 
-        public GroupPermissionRepository(RoleManager<GroupPermission> roleManager,MyDbContext context,IReadTokenService readTokenService) 
+        public GroupPermissionRepository(RoleManager<GroupPermission> roleManager,MyDbContext context,IReadTokenService readTokenService,
+            IPaginationService paginationServer) 
         {
             this.roleManager = roleManager;
             this.context = context;
             this.readTokenService = readTokenService;
+            this.paginationServer = paginationServer;
         }
         public async Task<IdentityResult> CreateGroupPermission(GroupPermissionModel model)
         {
@@ -42,23 +46,27 @@ namespace Flight.Repository.GroupPermissionRepository
             
         }
 
-        public async Task<List<GroupPermissionDTO>> GetAllGroupPermission(string? search)
+        public async Task<List<GroupPermissionDTO>> GetAllGroupPermission(string? search, int? page, int? pageSize)
         {
-            var role = await roleManager.Roles.Include(f=>f.ApplicationUser).ToListAsync();
+            var role = roleManager.Roles.Include(f=>f.ApplicationUser).AsQueryable();
             if(!string.IsNullOrEmpty(search))
             {
-                role=role.Where(role=>role.Name.Contains(search)).ToList();
+                role=role.Where(role => role.Name.Contains(search));
             }
-            return role.Select(ro => new GroupPermissionDTO
+            if(page.HasValue&&pageSize.HasValue)
+            {
+                role = await paginationServer.Pagination<GroupPermission>(role, page.Value, pageSize.Value);
+            }
+            return await role.Select(ro => new GroupPermissionDTO
             {
                 Name=ro.Name,
                 Create_At=ro.Create_Date,
                 Creator=ro.ApplicationUser!=null?ro.ApplicationUser.UserName:string.Empty,
                 Id=ro.Id,
                 Note=ro.Note,
-                TotalMember=context.UserRoles.Where(us=>us.RoleId==ro.Id).ToList().Count(),
+                TotalMember = context.UserRoles.Count(us => us.RoleId == ro.Id)
 
-            }).ToList();
+            }).ToListAsync();
         }
 
         public async Task<GroupPermissionDTO?> GetGroupPermission(string id)

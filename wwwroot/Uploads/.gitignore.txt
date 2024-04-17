@@ -1,0 +1,6 @@
+*
+!Avatar/
+!Document/
+!Signature/
+!Logo/
+!.gitignore

@@ -17,12 +17,12 @@ namespace Flight.Controllers
             this.flightRepository = flightRepository;
         }
         [HttpGet]
-        
-        public async Task<IActionResult> GetAllFlight(string? search, DateTime? date, int? documentTypeId)
+        [Authorize(Policy = "RequireRole")]
+        public async Task<IActionResult> GetAllFlight(string? search, DateTime? date, int? documentTypeId,int? page,int? pageSize)
         {
             try
             {
-                var flights = await flightRepository.GetAllFlight(search, date, documentTypeId);
+                var flights = await flightRepository.GetAllFlight(search, date, documentTypeId,page,pageSize);
                 return Ok(Repository<List<FlightDTO>>.WithData(flights, 200));
 
             }
@@ -32,7 +32,7 @@ namespace Flight.Controllers
             }
         }
         [HttpGet("{Id}")]
-        [Authorize]
+        [Authorize(Policy = "RequireRole")]
         public async Task<IActionResult> GetFlight(int Id)
         {
             try
@@ -52,7 +52,8 @@ namespace Flight.Controllers
             }
         }
         [HttpPost]
-        [Authorize]
+        [Authorize(Policy = "RequireRole")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> CreateFlight(FlightModel model)
         {
             try
@@ -72,7 +73,8 @@ namespace Flight.Controllers
             }
         }
         [HttpPut("{Id}")]
-        [Authorize]
+        [Authorize(Policy = "RequireRole")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateFlight(int Id,FlightModel model)
         {
             try
@@ -93,7 +95,8 @@ namespace Flight.Controllers
             }
         }
         [HttpDelete("{Id}")]
-        [Authorize]
+        [Authorize(Policy = "RequireRole")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteFlight(int Id)
         {
             try

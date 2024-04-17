@@ -18,7 +18,7 @@ namespace Flight.Controllers
             this.routeRepository = routeRepository;
         }
         [HttpGet]
-        
+        [Authorize(Policy = "RequireRole")]
         public async Task<IActionResult> GetAllRoute() 
         {
             try
@@ -32,7 +32,7 @@ namespace Flight.Controllers
             }
         }
         [HttpGet("{Id}")]
-        [Authorize]
+        [Authorize(Policy = "RequireRole")]
         public async Task<IActionResult> GetRoute(int Id)
         {
             try
@@ -50,7 +50,7 @@ namespace Flight.Controllers
             }
         }
         [HttpPost]
-        
+        [Authorize(Policy = "RequireRole")]
         public async Task<IActionResult> CreateRoute(RouteModel model)
         {
             try
@@ -64,7 +64,7 @@ namespace Flight.Controllers
             }
         }
         [HttpDelete("{Id}")]
-        [Authorize]
+        [Authorize(Policy = "RequireRole")]
         public async Task<IActionResult> DeleteRoute(int Id)
         {
             try
@@ -83,7 +83,7 @@ namespace Flight.Controllers
             }
         }
         [HttpPut("{Id}")]
-        [Authorize]
+        [Authorize(Policy = "RequireRole")]
         public async Task<IActionResult> UpdateRoute(int Id,RouteModel model)
         {
             try

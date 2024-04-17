@@ -8,7 +8,7 @@ namespace Flight.Repository.UserRepository
         Task CreateUser(UserModel model);
         Task UpdateUser(string Id,UserUpdateModel model);
         Task DeleteUser(string Id);
-        Task<List<UserDTO>> GetAllUser(string? search);
+        Task<List<UserDTO>> GetAllUser(string? search,string? groupPermissionId,int? page,int? pageSize);
         Task<UserDTO?> GetUser(string Id);
         Task ResetPassword(string email);
     }

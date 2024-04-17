@@ -29,6 +29,10 @@ namespace Flight.Service.LoginService
             };
             var userRoles = await userManager.GetRolesAsync(user);
             var role = userRoles.FirstOrDefault();
+            if (role != null)
+            {
+                authClaims.Add(new Claim(ClaimTypes.Role, role.ToString()));
+            }
             var authenKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWT:Secret"]));
             var token = new JwtSecurityToken(
                 issuer: configuration["JWT:ValidIssuer"],

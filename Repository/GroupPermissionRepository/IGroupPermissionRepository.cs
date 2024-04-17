@@ -9,7 +9,7 @@ namespace Flight.Repository.GroupPermissionRepository
         Task<IdentityResult> CreateGroupPermission(GroupPermissionModel model);
         Task<IdentityResult> UpdateGroupPermission(string id,GroupPermissionModel model);
         Task DeleteGroupPermission(string id);
-        Task<List<GroupPermissionDTO>> GetAllGroupPermission(string?search);
+        Task<List<GroupPermissionDTO>> GetAllGroupPermission(string?search,int?page,int? pageSize);
         Task<GroupPermissionDTO?> GetGroupPermission(string id);
     }
 }

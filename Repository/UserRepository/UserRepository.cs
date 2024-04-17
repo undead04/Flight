@@ -2,6 +2,7 @@
 using Flight.Model;
 using Flight.Model.DTO;
 using Flight.Service.FileService;
+using Flight.Service.PaginationService;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Data;
@@ -11,12 +12,14 @@ namespace Flight.Repository.UserRepository
     public class UserRepository : IUserRepository
     {
         private readonly UserManager<ApplicationUser> userManager;
-        private readonly IFileService fileService;
+        private readonly RoleManager<GroupPermission> roleManager;
+        private readonly IPaginationService paginationServer;
 
-        public UserRepository(UserManager<ApplicationUser> userManager,IFileService fileService) 
+        public UserRepository(UserManager<ApplicationUser> userManager,RoleManager<GroupPermission> roleManager,IPaginationService paginationServer) 
         { 
             this.userManager= userManager;
-            this.fileService = fileService;
+            this.roleManager = roleManager;
+            this.paginationServer= paginationServer;
         }
         public async Task CreateUser(UserModel model)
         {
@@ -38,19 +41,39 @@ namespace Flight.Repository.UserRepository
             }
         }
 
-        public async Task<List<UserDTO>> GetAllUser(string? search)
+        public async Task<List<UserDTO>> GetAllUser(string? search, string? groupPermissionId, int? page, int? pageSize)
         {
-            var users = await userManager.Users.ToListAsync();
+            var users = userManager.Users.AsQueryable();
             if (!string.IsNullOrEmpty(search))
             {
-                users = users.Where(us => us.Email.Contains(search)).ToList();
+                users = users.Where(us => us.Email.Contains(search));
             }
-            return users.Select(us=>new UserDTO
+            if (!string.IsNullOrEmpty(groupPermissionId))
+            {
+                
+                var roleName = await roleManager.FindByIdAsync(groupPermissionId);
+                var usersInRole = new List<ApplicationUser>();
+
+                foreach (var user in users)
+                {
+                    var isInRole = await userManager.IsInRoleAsync(user, roleName.Name);
+                    if (isInRole)
+                    {
+                        usersInRole.Add(user);
+                    }
+                }
+            }
+            if(page.HasValue&&pageSize.HasValue)
+            {
+                users = await paginationServer.Pagination<ApplicationUser>(users, page.Value, pageSize.Value);
+            }
+                return users.Select(us=>new UserDTO
             {
                 Id=us.Id,
                 Email=us.Email,
                 Name=us.UserName,
                 Phone=us.PhoneNumber,
+                Permission= string.Join(string.Empty, userManager.GetRolesAsync(us).Result)
             }).ToList();
         }
 

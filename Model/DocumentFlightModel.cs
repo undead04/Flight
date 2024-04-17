@@ -1,8 +1,7 @@
 ﻿namespace Flight.Model
 {
-    public class DocumentFileOriginalModel
+    public class DocumentFlightModel
     {
-        public string Name { get; set; } = string.Empty;
         public int FlightId { get; set; }
         public int DocumentTypeId { get; set; }
         public string Note { get; set; }= string.Empty;

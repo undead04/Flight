@@ -2,6 +2,6 @@
 {
     public class VersionModel
     {
-        public const string Origin = "1.0";
+        public const string Origin = "1";
     }
 }

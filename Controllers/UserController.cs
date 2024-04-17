@@ -18,12 +18,12 @@ namespace Flight.Controllers
             this.userRepository=userRepository;
         }
         [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> GetAllUser(string? search)
+        [Authorize(Policy = "RequireRole")]
+        public async Task<IActionResult> GetAllUser(string? search, string? groupPermissionId, int? page, int? pageSize)
         {
             try
             {
-                var users = await userRepository.GetAllUser(search);
+                var users = await userRepository.GetAllUser(search,groupPermissionId,page,pageSize);
                 return Ok(Repository<List<UserDTO>>.WithData(users, 200));
             }
             catch
@@ -32,7 +32,7 @@ namespace Flight.Controllers
             }
         }
         [HttpGet("{Id}")]
-        [Authorize]
+        [Authorize(Policy = "RequireRole")]
         public async Task<IActionResult> GetUser(string Id)
         {
             try
@@ -50,6 +50,8 @@ namespace Flight.Controllers
             }
         }
         [HttpPost]
+        [Authorize(Policy = "RequireRole")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> CreateUser(UserModel model)
         {
             try
@@ -63,7 +65,8 @@ namespace Flight.Controllers
             }
         }
         [HttpDelete("{Id}")]
-        [Authorize]
+        [Authorize(Policy = "RequireRole")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteUser(string Id)
         {
             try
@@ -83,7 +86,8 @@ namespace Flight.Controllers
             }
         }
         [HttpPut("{Id}")]
-        [Authorize]
+        [Authorize(Policy = "RequireRole")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateUser(string Id,UserUpdateModel model)
         {
             try

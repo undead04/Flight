@@ -17,7 +17,8 @@ namespace Flight.Controllers
             this.documentTypeRepository = documentTypeRepository;
         }
         [HttpPost]
-        [Authorize]
+        [Authorize(Policy = "RequireRole")]
+        [Authorize(Roles ="admin")]
         public async Task<IActionResult> CreateDocumentType(DocumentTypeModel model)
         {
             try
@@ -35,7 +36,7 @@ namespace Flight.Controllers
             }
         }
         [HttpGet]
-        [Authorize]
+        [Authorize(Policy = "RequireRole")]
         public async Task<IActionResult> GetAllDocumentType(string?search,DateTime?date,int? documentTypeId)
         {
             try
@@ -49,7 +50,7 @@ namespace Flight.Controllers
             }
         }
         [HttpGet("{Id}")]
-        [Authorize]
+        [Authorize(Policy = "RequireRole")]
         public async Task<IActionResult> GetDocumentType(int Id)
         {
             try
@@ -67,7 +68,8 @@ namespace Flight.Controllers
             }
         }
         [HttpDelete("{Id}")]
-        [Authorize]
+        [Authorize(Policy = "RequireRole")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteDocumentType(int Id)
         {
             try
@@ -86,7 +88,8 @@ namespace Flight.Controllers
             }
         }
         [HttpPut("{Id}")]
-        [Authorize]
+        [Authorize(Policy = "RequireRole")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateDocumentType(int Id,DocumentTypeModel model)
         {
             try

@@ -7,7 +7,7 @@ namespace Flight.Repository.FlightRepository
     {
         Task<int> CreateFlight(FlightModel model);
         Task<FlightDTO?> GetFlight(int Id);
-        Task<List<FlightDTO>> GetAllFlight(string? search, DateTime? date,int? categoryId);
+        Task<List<FlightDTO>> GetAllFlight(string? search, DateTime? date,int? categoryId,int? page,int? pageSize);
         Task UpdateFlight(int Id,FlightModel model);
         Task DeleteFlight(int Id);
         

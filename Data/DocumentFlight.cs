@@ -4,6 +4,7 @@
     {
         public int Id { get; set; }
         public int FlightId { get; set; }
+        public string ExtensionFile { get; set; } = string.Empty;
         public int DocumentTypeId { get; set; }
         public string Name { get; set; } = string.Empty;
         public DateTime Create_Date { get; set; }

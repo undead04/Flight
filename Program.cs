@@ -1,16 +1,27 @@
-﻿using Flight.Data;
+﻿using Flight.Authorize;
+using Flight.Authorize.DocumentAuthorize;
+using Flight.Controllers;
+using Flight.Data;
+using Flight.Repository.DocumentFlightPermissionRepository;
+using Flight.Repository.DocumentFlightRepository;
 using Flight.Repository.DocumentTypeRepository;
 using Flight.Repository.FlightRepository;
+using Flight.Repository.GeneralRepository;
 using Flight.Repository.GroupPermissionRepository;
 using Flight.Repository.PermissionRepository;
 using Flight.Repository.RouteRepository;
 using Flight.Repository.UserRepository;
+using Flight.Service.ChangeOwnerService;
+using Flight.Service.ConfirmDocumentService;
 using Flight.Service.FileService;
 using Flight.Service.LoginService;
+using Flight.Service.PaginationService;
 using Flight.Service.ReadTokenService;
+using Flight.Service.RoleService;
 using Flight.Validation;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -67,6 +78,15 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRouteRepository, RouteRepository>();
 builder.Services.AddScoped<IPermissionRepository,PermissionRepository>();
 builder.Services.AddScoped<IFileService, FileService>();
+builder.Services.AddScoped<IDocumentFlightRepository, DocumentFLightRepository>();
+builder.Services.AddScoped<IDocumenttFlightPermissionRepository,DocumentFlightPermissionRepository>();
+builder.Services.AddScoped<IRoleService, RoleService>();
+builder.Services.AddSingleton<IAuthorizationHandler, RoleRequirementHandler>();
+builder.Services.AddScoped<IChangeOwnerService, ChangeOwerService>();
+builder.Services.AddScoped<IConfirmDocumentService, ConfirmDocumentService>();
+builder.Services.AddScoped<IPaginationService, PaginationService>();
+builder.Services.AddScoped<IDocumentAuthorize, DocumentAuthorize>();
+builder.Services.AddScoped<IGeneralRepository, GeneralRepository>();
 builder.Services.AddAuthentication(options => {
     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
     options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -83,6 +103,13 @@ builder.Services.AddAuthentication(options => {
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWT:Secret"]))
     };
 });
+// add authozire
+builder.Services.AddAuthorization(options =>
+{
+    options.AddPolicy("RequireRole", policy =>
+        policy.Requirements.Add(new RoleRequirement()));
+});
+builder.Services.AddHttpContextAccessor();
 builder.Services.Configure<ApiBehaviorOptions>(options =>
 {
     options.SuppressModelStateInvalidFilter = true;

@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Flight.Migrations
 {
-    public partial class Init : Migration
+    public partial class inti : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -34,6 +34,20 @@ namespace Flight.Migrations
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_AspNetUsers", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "generals",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Theme = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Logo = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_generals", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -257,6 +271,7 @@ namespace Flight.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     FlightId = table.Column<int>(type: "int", nullable: false),
+                    ExtensionFile = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     DocumentTypeId = table.Column<int>(type: "int", nullable: false),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Create_Date = table.Column<DateTime>(type: "datetime2", nullable: false),
@@ -285,7 +300,7 @@ namespace Flight.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "DocumentFlightPermission",
+                name: "documentFlightPermissions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
@@ -295,14 +310,14 @@ namespace Flight.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DocumentFlightPermission", x => x.Id);
+                    table.PrimaryKey("PK_documentFlightPermissions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_DocumentFlightPermission_AspNetRoles_GroupPermissionId",
+                        name: "FK_documentFlightPermissions_AspNetRoles_GroupPermissionId",
                         column: x => x.GroupPermissionId,
                         principalTable: "AspNetRoles",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_DocumentFlightPermission_documentFlight_DocumentFlightId",
+                        name: "FK_documentFlightPermissions_documentFlight_DocumentFlightId",
                         column: x => x.DocumentFlightId,
                         principalTable: "documentFlight",
                         principalColumn: "Id");
@@ -368,13 +383,13 @@ namespace Flight.Migrations
                 column: "FlightId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DocumentFlightPermission_DocumentFlightId",
-                table: "DocumentFlightPermission",
+                name: "IX_documentFlightPermissions_DocumentFlightId",
+                table: "documentFlightPermissions",
                 column: "DocumentFlightId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_DocumentFlightPermission_GroupPermissionId",
-                table: "DocumentFlightPermission",
+                name: "IX_documentFlightPermissions_GroupPermissionId",
+                table: "documentFlightPermissions",
                 column: "GroupPermissionId");
 
             migrationBuilder.CreateIndex(
@@ -416,7 +431,10 @@ namespace Flight.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "DocumentFlightPermission");
+                name: "documentFlightPermissions");
+
+            migrationBuilder.DropTable(
+                name: "generals");
 
             migrationBuilder.DropTable(
                 name: "permissionDocuments");

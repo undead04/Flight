@@ -18,12 +18,12 @@ namespace Flight.Controllers
             this.groupPerMissionRepository=groupPermissionRepository;
         }
         [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> GetAllGroupPermission(string?search) 
+        [Authorize(Policy = "RequireRole")]
+        public async Task<IActionResult> GetAllGroupPermission(string? search, int? page, int? pageSize) 
         {
             try
             {
-                var groupPermission=await groupPerMissionRepository.GetAllGroupPermission(search);
+                var groupPermission=await groupPerMissionRepository.GetAllGroupPermission(search, page,pageSize);
                 return Ok(Repository<List<GroupPermissionDTO>>.WithData(groupPermission,200));
             }
             catch
@@ -32,7 +32,7 @@ namespace Flight.Controllers
             }
         }
         [HttpGet("{Id}")]
-        [Authorize]
+        [Authorize(Policy = "RequireRole")]
         public async Task<IActionResult> GetGroupPermission(string Id)
         {
             try
@@ -50,7 +50,8 @@ namespace Flight.Controllers
             }
         }
         [HttpPost]
-        [Authorize]
+        [Authorize(Policy = "RequireRole")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> CreateGroupPermission(GroupPermissionModel model)
         {
             try
@@ -68,7 +69,8 @@ namespace Flight.Controllers
             }
         }
         [HttpDelete("{Id}")]
-        [Authorize]
+        [Authorize(Policy = "RequireRole")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> DeleteGroupPermission(string Id)
         {
             try
@@ -88,7 +90,8 @@ namespace Flight.Controllers
             }
         }
         [HttpPut("{Id}")]
-        [Authorize]
+        [Authorize(Policy = "RequireRole")]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> UpdateGroupPermission(string Id,GroupPermissionModel model)
         {
             try

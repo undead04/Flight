@@ -113,6 +113,10 @@ namespace Flight.Migrations
                     b.Property<int>("DocumentTypeId")
                         .HasColumnType("int");
 
+                    b.Property<string>("ExtensionFile")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("FlightId")
                         .HasColumnType("int");
 
@@ -156,7 +160,7 @@ namespace Flight.Migrations
 
                     b.HasIndex("GroupPermissionId");
 
-                    b.ToTable("DocumentFlightPermission");
+                    b.ToTable("documentFlightPermissions");
                 });
 
             modelBuilder.Entity("Flight.Data.DocumentType", b =>
@@ -222,6 +226,27 @@ namespace Flight.Migrations
                     b.HasIndex("PoinOfUnLoad");
 
                     b.ToTable("flight");
+                });
+
+            modelBuilder.Entity("Flight.Data.General", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Logo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Theme")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("generals");
                 });
 
             modelBuilder.Entity("Flight.Data.PermissionDocumentType", b =>

@@ -12,6 +12,8 @@ namespace Flight.Data
         public DbSet<DocumentType> documentTypes { get; set; }
         public DbSet<DocumentFlight> documentFlight { get; set; }
         public DbSet<PermissionDocumentType> permissionDocuments { get; set; }
+        public DbSet<DocumentFlightPermission> documentFlightPermissions { get; set; }
+        public DbSet<General> generals { get; set; }
         protected override void OnModelCreating(ModelBuilder builder)
         {
 
